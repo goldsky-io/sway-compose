@@ -1,5 +1,7 @@
 import { TaskContext } from "compose";
 
+import { toBytes32 } from "../lib/utils";
+
 export async function main(hostFunctions: TaskContext) {
   const { logEvent, fetch, evm, collection } = hostFunctions;
 
@@ -24,8 +26,8 @@ export async function main(hostFunctions: TaskContext) {
     const timestamp = Date.now();
 
     // Convert timestamp and price to bytes32 format
-    const timestampAsBytes32 = `0x${timestamp.toString(16).padStart(64, '0')}`;
-    const priceAsBytes32 = `0x${Math.round(bitcoinPrice * 100).toString(16).padStart(64, '0')}`;
+    const timestampAsBytes32 = toBytes32(timestamp);
+    const priceAsBytes32 = toBytes32(Math.round(bitcoinPrice * 100));
 
     const onchainResponse = await wallet.writeContract(
       evm.chains.polygonAmoy,

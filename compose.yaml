@@ -1,7 +1,10 @@
 name: "bitcoin-demo"
+api_version: "onchain-triggers"
 tasks:
   - path: "./src/tasks/bitcoin-oracle.ts"
     name: "bitcoin_oracle"
     triggers: 
       - type: "cron"
         expression: "* * * * *" ## every minute
+      - type: "http"
+        authentication: "auth_token"
