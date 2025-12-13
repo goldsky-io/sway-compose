@@ -1,8 +1,7 @@
 name: "bitcoin-demo"
 tasks:
-  - path: "./tasks/bitcoin-oracle.ts"
+  - path: "./src/tasks/bitcoin-oracle.ts"
     name: "bitcoin_oracle"
-    retry_config:
-      max_attempts: 2
-      initial_interval_ms: 1000
-      backoff_factor: 1
+    triggers: 
+      - type: "cron"
+        expression: "* * * * *" ## every minute

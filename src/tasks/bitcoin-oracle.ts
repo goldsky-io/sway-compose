@@ -1,15 +1,10 @@
-/// <reference types="../.compose/types.d.ts" />
+import { TaskContext } from "compose";
 
-  export async function main(hostFunctions: TaskHostFunctions) {
-  const { logEvent, fetch, stage, writeContract, chains } = hostFunctions;
+export async function main(hostFunctions: TaskContext) {
+  const { logEvent, fetch, evm, collection } = hostFunctions;
 
   try {
-    // Log the start of the Bitcoin price oracle task
-    await logEvent({
-      code: "BITCOIN_ORACLE_START",
-      message: "Starting Bitcoin price oracle task",
-      data: JSON.stringify({ timestamp: new Date().toISOString() })
-    });
+    const wallet = await evm.wallet({ name: "bitcoin-oracle-wallet" });
 
     // Fetch Bitcoin price from CoinGecko API
     const response = await fetch<{ bitcoin: { usd: number } }>(
@@ -32,46 +27,28 @@
     const timestampAsBytes32 = `0x${timestamp.toString(16).padStart(64, '0')}`;
     const priceAsBytes32 = `0x${Math.round(bitcoinPrice * 100).toString(16).padStart(64, '0')}`;
 
-    const onchainResponse = await writeContract(
-      chains.polygonAmoy,
+    const onchainResponse = await wallet.writeContract(
+      evm.chains.polygonAmoy,
       "0x34a264BCD26e114eD6C46a15d0A3Ba1873CaA708",
       "write(bytes32,bytes32)",
       [timestampAsBytes32, priceAsBytes32],
     );
 
     // Store the price in a collection
-    const priceHistory = await stage.collection("bitcoin_prices");
+    const priceHistory = await collection("bitcoin_prices");
     const { id } = await priceHistory.insertOne({
       price: bitcoinPrice,
       timestamp: timestamp
     });
 
-    // Read the latest price we just inserted
-    const latestPrice = await priceHistory.getById(id);
-
-    // Get all price history
-    const allPrices = await priceHistory.list({ limit: 10 });
-
-    // Log successful price update
-    await logEvent({
-      code: "BITCOIN_PRICE_UPDATED",
-      message: `Bitcoin price updated to $${bitcoinPrice}`,
-      data: JSON.stringify({ 
-        price: bitcoinPrice, 
-        timestamp: timestamp,
-        historicalCount: allPrices.length
-      })
-    });
-
     console.log(`Bitcoin price updated: $${bitcoinPrice} at ${timestamp}`);
-    console.log(`Total historical prices: ${allPrices.length}`);
 
     return {
       success: true,
+      oracleHash: onchainResponse.hash,
       price: bitcoinPrice,
       timestamp,
       priceId: id,
-      historicalCount: allPrices.length
     };
 
   } catch (error) {

@@ -1,4 +1,5 @@
 .compose/
+restate-data
 .env
 stage.db
 *.log
