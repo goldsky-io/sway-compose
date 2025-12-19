@@ -2,7 +2,7 @@ import { TaskContext } from "compose";
 import { CONTRACT_ADDRESS } from "../constants";
 
 type TaskPayload = {
-  commitmentId: string;
+  commitmentId: number;
   completed: boolean;
 }
 
@@ -12,8 +12,8 @@ export async function main({ evm, env }: TaskContext, { commitmentId, completed 
   const onchainResponse = await wallet.writeContract(
     evm.chains.baseSepolia,
     CONTRACT_ADDRESS,
-    "write(bytes32,bytes32)",
-    [commitmentId, completed], // todo check actual args
+    "resolveCommitment(uint256,bool)",
+    [String(commitmentId), completed],
   );
 
   return {

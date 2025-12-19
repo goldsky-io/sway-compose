@@ -1,5 +1,5 @@
 name: "sway-compose"
-api_version: "onchain-triggers"
+api_version: "reorg-handling"
 secrets:
   - PRIVATE_ESCROW_OWNER_KEY 
 tasks:
