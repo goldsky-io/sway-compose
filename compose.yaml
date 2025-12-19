@@ -1,10 +1,16 @@
 name: "sway-goldsky"
 api_version: "reorg-handling"
 secrets:
-  - PRIVATE_ESCROW_OWNER_KEY 
+  - PRIVATE_ESCROW_OWNER_KEY
+  # only used for local testing currently - PRIVATE_USER_KEY
 tasks:
   - path: "./src/tasks/oracle.ts"
     name: "oracle"
+    triggers: 
+      - type: "http"
+        authentication: "auth_token"
+  - path: "./src/tasks/create-commitment.ts"
+    name: "create_commitment"
     triggers: 
       - type: "http"
         authentication: "auth_token"
