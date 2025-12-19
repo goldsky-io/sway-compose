@@ -1,4 +1,4 @@
-name: "sway-compose"
+name: "sway-goldsky"
 api_version: "reorg-handling"
 secrets:
   - PRIVATE_ESCROW_OWNER_KEY 
