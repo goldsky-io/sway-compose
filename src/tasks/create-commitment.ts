@@ -17,6 +17,12 @@ export async function main({ evm, env }: TaskContext, { stakeAmount = 1 }: TaskP
     USDC_ADDRESS,
     "approve(address,uint256)",
     [CONTRACT_ADDRESS, stakeAmountWei],
+    { confirmations: 3 },
+    {
+      max_attempts: 2,
+      initial_interval_ms: 1000,
+      backoff_factor: 2,
+    }
   );
 
   // Step 2: Create the commitment
@@ -26,6 +32,12 @@ export async function main({ evm, env }: TaskContext, { stakeAmount = 1 }: TaskP
     CONTRACT_ADDRESS,
     "createCommitment(uint256)",
     [stakeAmountWei],
+    { confirmations: 3 },
+    {
+      max_attempts: 2,
+      initial_interval_ms: 1000,
+      backoff_factor: 2,
+    }
   );
 
   return {

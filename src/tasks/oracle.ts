@@ -14,6 +14,12 @@ export async function main({ evm, env }: TaskContext, { commitmentId, completed 
     CONTRACT_ADDRESS,
     "resolveCommitment(uint256,bool)",
     [String(commitmentId), completed],
+    { confirmations: 3 },
+    {
+      max_attempts: 2,
+      initial_interval_ms: 1000,
+      backoff_factor: 2,
+    }
   );
 
   return {
