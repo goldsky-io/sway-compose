@@ -2,7 +2,7 @@ name: "sway-goldsky"
 api_version: "reorg-handling"
 secrets:
   - PRIVATE_ESCROW_OWNER_KEY
-  # only used for local testing currently - PRIVATE_USER_KEY
+  - PRIVATE_USER_KEY
 tasks:
   - path: "./src/tasks/oracle.ts"
     name: "oracle"
