@@ -1,5 +1,5 @@
 name: "sway-goldsky"
-api_version: "reorg-handling"
+api_version: "deploy-raw-config"
 secrets:
   - PRIVATE_ESCROW_OWNER_KEY
   - PRIVATE_USER_KEY
