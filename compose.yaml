@@ -1,5 +1,5 @@
 name: "sway-goldsky"
-api_version: "deploy-raw-config"
+api_version: "remove-restate"
 secrets:
   - PRIVATE_ESCROW_OWNER_KEY 
 tasks:
